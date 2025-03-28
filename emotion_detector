@@ -1,0 +1,28 @@
+# app/emotion_detector.py
+import json
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import Features, EmotionOptions
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+import os
+from dotenv import load_dotenv # type: ignore
+
+# Load API key from .env file
+load_dotenv()
+WATSON_API_KEY = os.getenv("WATSON_API_KEY")
+WATSON_URL = os.getenv("WATSON_URL")
+
+# Authenticate with IBM Watson NLP
+authenticator = IAMAuthenticator(WATSON_API_KEY)
+nlu = NaturalLanguageUnderstandingV1(version="2021-08-01", authenticator=authenticator)
+nlu.set_service_url(WATSON_URL)
+
+def analyze_emotion(text):
+    """Analyzes emotion in text using IBM Watson NLP."""
+    response = nlu.analyze(
+        text=text, 
+        features=Features(emotion=EmotionOptions()), 
+        language="en"
+    ).get_result()
+    
+    emotions = response["emotion"]["document"]["emotion"]
+    return emotions
