@@ -1,0 +1,21 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(_file_), '..')))
+
+from app.emotion_detector import analyze_emotion  # Ye ab kaam karega
+
+
+# app/tests/test_emotion.py
+import unittest
+from app.emotion_detector import analyze_emotion
+
+class EmotionDetectionTest(unittest.TestCase):
+    def test_emotion_analysis(self):
+        """Test if emotion analysis returns expected keys."""
+        sample_text = "I am very happy today!"
+        result = analyze_emotion(sample_text)
+        self.assertTrue("joy" in result)
+        self.assertTrue("sadness" in result)
+        
+if __name__ == "__main__":
+    unittest.main()
